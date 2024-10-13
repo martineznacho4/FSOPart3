@@ -1,15 +1,15 @@
 const express = require("express");
-const morgan = require('morgan')
-const fs = require('fs')
-const path = require('path')
-
+const morgan = require("morgan");
+const fs = require("fs");
+const path = require("path");
 const app = express();
 
-// app.use(express.json());
-var logStream = fs.createWriteStream(path.join(__dirname, 'requests.log'), { flags: 'a' })
+app.use(express.json());
+var logStream = fs.createWriteStream(path.join(__dirname, "requests.log"), {
+	flags: "a",
+});
 
-
-app.use(morgan('tiny', {stream:logStream}))
+morgan.token("post", (req, res) => JSON.stringify(req.body));
 
 let persons = [
 	{
@@ -33,6 +33,46 @@ let persons = [
 		number: "39-23-6423122",
 	},
 ];
+
+app.post(
+	"/api/persons",
+	morgan(":method :url :status :post", { stream: logStream }),
+	(request, response) => {
+		const body = request.body;
+
+		if (!body.name || !body.number) {
+			response.status(400).json({
+				error: "Missing name or number",
+			});
+		} else if (
+			persons.find(
+				(person) =>
+					person.name.toLowerCase() === body.name.toLowerCase()
+			)
+		) {
+			response.status(400).json({
+				error: "Names must be unique",
+			});
+		} else {
+			const id =
+				persons.length > 1
+					? parseInt(persons[persons.length - 1].id) + 1
+					: 1;
+
+			const newPerson = {
+				id: id.toString(),
+				name: body.name,
+				number: body.number,
+			};
+
+			persons = persons.concat(newPerson);
+
+			response.json(newPerson);
+		}
+	}
+);
+
+app.use(morgan("tiny", { stream: logStream }));
 
 app.get("/api/persons", (request, response) => {
 	response.json(persons);
@@ -62,42 +102,6 @@ app.delete("/api/persons/:id", (request, response) => {
 
 	response.status(204).end();
 });
-
-app.post("/api/persons", (request, response) => {
-	const body = request.body;
-
-	if (!body.name || !body.number) {
-		response.status(400).json({
-			error: "Missing name or number",
-		});
-	} else if (
-		persons.find(
-			(person) => person.name.toLowerCase() === body.name.toLowerCase()
-		)
-	) {
-		response.status(400).json({
-			error: "Names must be unique",
-		});
-	} else {
-		const id =
-			persons.length > 1
-				? parseInt(persons[persons.length - 1].id) + 1
-				: 1;
-
-		const newPerson = {
-			id: id.toString(),
-			name: body.name,
-			number: body.number,
-		};
-
-		persons = persons.concat(newPerson);
-
-		response.json(newPerson);
-	}
-});
-
-
-
 
 const PORT = 3001;
 app.listen(PORT, () => {

@@ -1,6 +1,2 @@
-GET /api/persons 304 - - 1.779 ms
-GET /favicon.ico 404 150 - 1.380 ms
-GET /api/persons 304 - - 0.334 ms
-GET /api/persons/3 304 - - 0.538 ms
-GET /api/persons/3 304 - - 0.385 ms
-GET /api/persons 304 - - 1.848 ms
+GET /api/persons 200 231 - 1.696 ms
+POST /api/persons 200 {"name":"nacho","number":"30-2332"}
