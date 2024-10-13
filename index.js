@@ -60,7 +60,15 @@ app.post("/api/persons", (request, response) => {
 
 	if (!body.name || !body.number) {
 		response.status(400).json({
-			error: "Missing information",
+			error: "Missing name or number",
+		});
+	} else if (
+		persons.find(
+			(person) => person.name.toLowerCase() === body.name.toLowerCase()
+		)
+	) {
+		response.status(400).json({
+			error: "Names must be unique",
 		});
 	} else {
 		const id =
