@@ -50,11 +50,35 @@ app.get("/api/persons/:id", (request, response) => {
 });
 
 app.delete("/api/persons/:id", (request, response) => {
+	persons = persons.filter((person) => person.id !== request.params.id);
 
-    persons = persons.filter((person) => (person.id !== request.params.id))
+	response.status(204).end();
+});
 
-    response.status(204).end()
-})
+app.post("/api/persons", (request, response) => {
+	const body = request.body;
+
+	if (!body.name || !body.number) {
+		response.status(400).json({
+			error: "Missing information",
+		});
+	} else {
+		const id =
+			persons.length > 1
+				? parseInt(persons[persons.length - 1].id) + 1
+				: 1;
+
+		const newPerson = {
+			id: id.toString(),
+			name: body.name,
+			number: body.number,
+		};
+
+		persons = persons.concat(newPerson);
+
+		response.json(newPerson);
+	}
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {
