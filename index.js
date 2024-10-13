@@ -1,7 +1,15 @@
 const express = require("express");
+const morgan = require('morgan')
+const fs = require('fs')
+const path = require('path')
+
 const app = express();
 
-app.use(express.json());
+// app.use(express.json());
+var logStream = fs.createWriteStream(path.join(__dirname, 'requests.log'), { flags: 'a' })
+
+
+app.use(morgan('tiny', {stream:logStream}))
 
 let persons = [
 	{
@@ -87,6 +95,9 @@ app.post("/api/persons", (request, response) => {
 		response.json(newPerson);
 	}
 });
+
+
+
 
 const PORT = 3001;
 app.listen(PORT, () => {
