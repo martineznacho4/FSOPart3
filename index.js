@@ -4,6 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const app = express();
 
+app.use(express.static('dist'))
+
 app.use(express.json());
 var logStream = fs.createWriteStream(path.join(__dirname, "requests.log"), {
 	flags: "a",
@@ -103,7 +105,7 @@ app.delete("/api/persons/:id", (request, response) => {
 	response.status(204).end();
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
 	console.log(`Server running on port:${PORT}`);
 });
