@@ -1,10 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
+const Person = require("./models/person");
 const app = express();
 
-app.use(express.static('dist'))
+app.use(express.static("dist"));
 
 app.use(express.json());
 var logStream = fs.createWriteStream(path.join(__dirname, "requests.log"), {
@@ -46,30 +48,15 @@ app.post(
 			response.status(400).json({
 				error: "Missing name or number",
 			});
-		} else if (
-			persons.find(
-				(person) =>
-					person.name.toLowerCase() === body.name.toLowerCase()
-			)
-		) {
-			response.status(400).json({
-				error: "Names must be unique",
-			});
 		} else {
-			const id =
-				persons.length > 1
-					? parseInt(persons[persons.length - 1].id) + 1
-					: 1;
-
-			const newPerson = {
-				id: id.toString(),
+			const person = new Person({
 				name: body.name,
 				number: body.number,
-			};
+			});
 
-			persons = persons.concat(newPerson);
-
-			response.json(newPerson);
+			person.save().then((savedPerson) => {
+				response.json(savedPerson);
+			});
 		}
 	}
 );
@@ -77,7 +64,9 @@ app.post(
 app.use(morgan("tiny", { stream: logStream }));
 
 app.get("/api/persons", (request, response) => {
-	response.json(persons);
+	Person.find({}).then((persons) => {
+		response.json(persons);
+	});
 });
 
 app.get("/info", (request, response) => {
@@ -105,7 +94,7 @@ app.delete("/api/persons/:id", (request, response) => {
 	response.status(204).end();
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
 	console.log(`Server running on port:${PORT}`);
 });

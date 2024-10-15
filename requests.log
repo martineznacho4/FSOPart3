@@ -5,3 +5,8 @@ POST /api/persons 200 {"name":"Nacho","number":"4343"}
 GET /api/persons 200 231 - 2.195 ms
 GET /api/persons 304 - - 0.702 ms
 POST /api/persons 200 {"name":"Nacho","number":"43434"}
+GET /api/persons 200 215 - 39.486 ms
+GET /api/persons 304 - - 40.246 ms
+GET /api/persons 304 - - 33.799 ms
+GET /api/persons 304 - - 44.838 ms
+POST /api/persons 200 {"name":"Mike","number":"49203-12314"}
