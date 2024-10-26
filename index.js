@@ -72,27 +72,57 @@ app.get("/api/persons", (request, response) => {
 app.get("/info", (request, response) => {
 	const time = new Date();
 
-	response.send(`<p>Phonebook has info for ${persons.length} people.</p>
-                   <p>${time.toLocaleDateString()}</p>`);
+	Person.collection.countDocuments().then((total) => {
+		response.send(`<p>Phonebook has info for ${total} people.</p>
+						<p>${time.toLocaleDateString()}</p>`);
+	});
 });
 
-app.get("/api/persons/:id", (request, response) => {
-	const id = request.params.id;
+app.get("/api/persons/:id", (request, response, next) => {
+	Person.findById(request.params.id)
+		.then((result) => {
+			if (result) {
+				response.json(result);
+			} else {
+				response.status(400).end();
+			}
+		})
+		.catch((error) => next(error));
+});
 
-	const person = persons.find((person) => person.id === id);
+app.delete("/api/persons/:id", (request, response, next) => {
+	Person.findByIdAndDelete(request.params.id)
+		.then((result) => {
+			response.status(204).end();
+		})
+		.catch((error) => next(error));
+});
 
-	if (person) {
-		response.json(person);
-	} else {
-		response.status(404).end();
+app.put("/api/persons/:id", (request, response, next) => {
+	const body = request.body;
+
+	const person = {
+		name: body.name,
+		number: body.number,
+	};
+
+	Person.findByIdAndUpdate(request.params.id, person, { new: true })
+		.then((result) => {
+			response.json(result);
+		})
+		.catch((error) => next(error));
+});
+
+const errorHandler = (error, request, response, next) => {
+	console.error(error.message);
+	if (error.name === "CastError") {
+		return response.status(400).send({ error: "bad id" });
 	}
-});
 
-app.delete("/api/persons/:id", (request, response) => {
-	persons = persons.filter((person) => person.id !== request.params.id);
+	next(error);
+};
 
-	response.status(204).end();
-});
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
