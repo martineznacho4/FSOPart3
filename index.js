@@ -41,7 +41,7 @@ let persons = [
 app.post(
 	"/api/persons",
 	morgan(":method :url :status :post", { stream: logStream }),
-	(request, response) => {
+	(request, response,next) => {
 		const body = request.body;
 
 		if (!body.name || !body.number) {
@@ -56,7 +56,8 @@ app.post(
 
 			person.save().then((savedPerson) => {
 				response.json(savedPerson);
-			});
+			}).catch(error => next(error))
+			;
 		}
 	}
 );
@@ -106,7 +107,7 @@ app.put("/api/persons/:id", (request, response, next) => {
 		number: body.number,
 	};
 
-	Person.findByIdAndUpdate(request.params.id, person, { new: true })
+	Person.findByIdAndUpdate(request.params.id, person, { new: true, runValidators:true})
 		.then((result) => {
 			response.json(result);
 		})
@@ -114,7 +115,7 @@ app.put("/api/persons/:id", (request, response, next) => {
 });
 
 const errorHandler = (error, request, response, next) => {
-	console.error(error.message);
+	// console.error(error.message);
 	if (error.name === "CastError") {
 		return response.status(400).send({ error: "bad id" });
 	}

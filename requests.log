@@ -62,3 +62,59 @@ GET /persons 404 146 - 0.330 ms
 GET /api/persons 304 - - 33.424 ms
 GET /api/persons/434343 400 18 - 2.350 ms
 GET /api/persons/670d695211b27d8ab72d7970 304 - - 29.764 ms
+GET /api/persons/670d695211b27d8ab72d7970 304 - - 31.045 ms
+GET /api/persons 304 - - 28.964 ms
+GET /api/persons 304 - - 41.168 ms
+GET /api/persons 304 - - 34.022 ms
+GET /api/persons 304 - - 44.465 ms
+GET /api/persons 200 282 - 38.741 ms
+POST /api/persons 200 {"name":"Miguel","number":"23323232"}
+GET /api/persons 200 352 - 37.969 ms
+GET /api/persons 304 - - 38.337 ms
+GET /api/persons 200 352 - 38.538 ms
+GET /api/persons 304 - - 37.546 ms
+GET /api/persons 304 - - 38.387 ms
+GET /api/persons 304 - - 41.054 ms
+GET /api/persons 304 - - 33.998 ms
+GET /api/persons 200 352 - 33.471 ms
+GET /api/persons 304 - - 40.826 ms
+POST /api/persons 500 {"name":"s","number":"2213"}
+POST /api/persons 500 {"name":"sr","number":"221323"}
+POST /api/persons 200 {"name":"srt","number":"221323"}
+DELETE /api/persons/671d3263e171bc0e02974eb5 204 - - 40.096 ms
+GET /api/persons 200 352 - 34.548 ms
+POST /api/persons 500 {"name":"s","number":"2w123"}
+GET /api/persons 304 - - 33.984 ms
+POST /api/persons 500 {"name":"s","number":"4224"}
+GET /api/persons 304 - - 33.803 ms
+POST /api/persons 500 {"name":"s","number":"442"}
+GET /api/persons 304 - - 33.678 ms
+POST /api/persons 500 {"name":"s","number":"2323"}
+GET /api/persons 304 - - 33.388 ms
+POST /api/persons 500 {"name":"s","number":"2323"}
+GET /api/persons 304 - - 33.349 ms
+GET /api/persons 304 - - 35.556 ms
+POST /api/persons 500 {"name":"s","number":"4232"}
+POST /api/persons 500 {"name":"s","number":"4232"}
+GET /api/persons 304 - - 34.084 ms
+POST /api/persons 500 {"name":"d","number":"553453"}
+GET /api/persons 304 - - 38.212 ms
+GET /api/persons 200 352 - 29.785 ms
+POST /api/persons 500 {"name":"sd","number":"43"}
+DELETE /api/persons/671d2fb6cbc41c23da8873c3 204 - - 35.561 ms
+POST /api/persons 500 {"name":"Juan","number":"43"}
+POST /api/persons 500 {"name":"Juan","number":"43"}
+POST /api/persons 200 {"name":"Juan","number":"4-323232"}
+DELETE /api/persons/671d377e44502f3e816dc2bf 204 - - 33.499 ms
+POST /api/persons 200 {"name":"Juan","number":"-424242242"}
+DELETE /api/persons/671d37aa44502f3e816dc2c2 204 - - 50.168 ms
+POST /api/persons 500 {"name":"Juan","number":"-323232"}
+POST /api/persons 500 {"name":"Juan","number":"2-323232"}
+POST /api/persons 200 {"name":"Juan","number":"22-323232"}
+PUT /api/persons/670d695211b27d8ab72d7970 200 65 - 43.886 ms
+GET /api/persons 200 350 - 36.087 ms
+DELETE /api/persons/670d695211b27d8ab72d7970 204 - - 36.553 ms
+POST /api/persons 200 {"name":"Nacho","number":"43-313213123"}
+PUT /api/persons/671d5a0d9a385b6028cfcad5 500 834 - 4.255 ms
+PUT /api/persons/671d5a0d9a385b6028cfcad5 500 835 - 0.998 ms
+PUT /api/persons/671d5a0d9a385b6028cfcad5 200 68 - 34.444 ms
